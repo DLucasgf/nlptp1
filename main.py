@@ -89,6 +89,9 @@ class MySentences(object):
         for line in open(os.path.join(self.dirname, self.name)):
             yield line.split()
  
-sentences = MySentences('/home/lucas/Documents/git/nlptp1/docs', 'Candide by Voltaire.txt') # a memory-friendly iterator
-model = gensim.models.Word2Vec(sentences, iter=15)
-model.wv.save_word2vec_format('~/Documents/git/nlptp1/outs/voltaire', binary=False)
+
+for i in range(0, 1):
+    print(str(i) + " " + docs[i])
+    sentences = MySentences('/home/lucas/Documentos/git/nlptp1/docs', docs[i]) # a memory-friendly iterator
+    model = gensim.models.Word2Vec(sentences, iter=15)
+    model.wv.save_word2vec_format('/home/lucas/Documentos/git/nlptp1/outs/' + docs[i] + '.txt', binary=False)
