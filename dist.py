@@ -1,27 +1,28 @@
 import math
+import numpy as np
 
-def cosine(doc1, doc2):
+def cosine(doc1, doc2, n):
     num = 0
     den1 = 0
     den2 = 0
 
-    for i in range(doc1):
-        for j in range(doc2):
+    for i in range(n):
+        for j in range(n):
             num += doc1[i][j] * doc2[i][j]
 
-    for i in range(doc1):
-        for j in range(doc2):
+    for i in range(n):
+        for j in range(n):
             den1 += doc1[i][j] ** 2
             den2 += doc2[i][j] ** 2
     
-    return num / (den1 * den2)
+    return num / (math.sqrt(den1) * math.sqrt(den2))
 
 
-def euclidean(doc1, doc2):
+def euclidean(doc1, doc2, n):
     a = 0
 
-    for i in range(doc1):
-        for j in range(doc2):
+    for i in range(n):
+        for j in range(n):
             a += (doc1[i][j] - doc2[j][i]) ** 2
 
     return math.sqrt(a)
@@ -107,4 +108,21 @@ docs = [
 
 
 #inicializa matriz
-dist = [[0] * len(docs) for i in range(len(docs))]
+distCos = [[0] * len(docs) for i in range(len(docs))]
+distEuc = [[0] * len(docs) for i in range(len(docs))]
+
+n = len(docs)
+
+for i in range(0, n):
+    doc1 = np.loadtxt('/home/lucas/Documentos/git/nlptp1/vecs/' + docs[i])
+    #print(doc1)
+    for j in range(0, n):
+        doc2 = np.loadtxt('/home/lucas/Documentos/git/nlptp1/vecs/' + docs[j])
+        distCos[i][j] = cosine(doc1, doc2, n)
+        distEuc[i][j] = euclidean(doc1, doc2, n)
+
+np.savetxt('/home/lucas/Documentos/git/nlptp1/dists/cosine.txt', distCos, fmt="%.14f")
+
+print(distEuc)
+
+np.savetxt('/home/lucas/Documentos/git/nlptp1/dists/euclidean.txt', distEuc, fmt="%.14f")
