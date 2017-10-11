@@ -87,11 +87,26 @@ class MySentences(object):
  
     def __iter__(self):
         for line in open(os.path.join(self.dirname, self.name)):
-            yield line.split()
+            yield line.lower().split()
  
 
-for i in range(0, 1):
+for i in range(0, len(docs)):
     print(str(i) + " " + docs[i])
     sentences = MySentences('/home/lucas/Documentos/git/nlptp1/docs', docs[i]) # a memory-friendly iterator
-    model = gensim.models.Word2Vec(sentences, iter=15)
-    model.wv.save_word2vec_format('/home/lucas/Documentos/git/nlptp1/outs/' + docs[i] + '.txt', binary=False)
+    model = gensim.models.Word2Vec(sentences, iter=15, sorted_vocab=1)
+    model.wv.save_word2vec_format('/home/lucas/Documentos/git/nlptp1/outs/' + docs[i], '/home/lucas/Documentos/git/nlptp1/vocabs/' + docs[i], binary=False)
+    #print(model.wv.vocab.keys())
+    #print(gensim.models.Word2Vec.build_vocab(self, sentences))
+    """vocabs = []
+    for item in model.wv.vocab.keys():
+        vocabs.append(item + " " + str(model.wv.vocab[item].count))
+    #print(vocabs)
+
+    file = open('/home/lucas/Documentos/git/nlptp1/vocabs/' + docs[i], 'w')
+    for item in vocabs:
+        file.write(item + '\n')
+    file.close()"""
+
+    print("Processed")
+
+print("Ended")
