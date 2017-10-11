@@ -1,5 +1,6 @@
 import gensim
 import os
+import re
 
 
 # lista de documentos
@@ -87,7 +88,11 @@ class MySentences(object):
  
     def __iter__(self):
         for line in open(os.path.join(self.dirname, self.name)):
-            yield line.lower().split()
+             tmp = line.lower()
+             #print(type(line))
+             tmp = re.sub('[!"#%\'()*+,-—/:;<=>?@\[\]^_`{|}~1234567890™’”“′‘\\\]', ' ', tmp)
+             #print(tmp)
+             yield tmp.split()
  
 
 for i in range(0, len(docs)):
