@@ -1,5 +1,6 @@
 import gensim
 import os
+import time
 import numpy as np
 from numpy import random
 
@@ -80,21 +81,28 @@ docs = [
 
 print('Vec starting')
 
-for doc in docs:
-    model = gensim.models.KeyedVectors.load_word2vec_format('/home/lucas/Documentos/git/nlptp1/outs/' + doc, binary=False)
+n = 0
+for d in range(0, len(docs)):
+    model = gensim.models.KeyedVectors.load_word2vec_format('/home/lucas/Documentos/git/nlptp1/outs/' + docs[d], binary=False)
 
     vocabs = []
     for item in model.wv.vocab.keys():
         vocabs.append(item)
         #print(vocabs)
 
-    print(doc)
+    print(str(n) + " " + docs[d])
+    n += 1
     #print(model.similarity('work', 'stood'))
     print(len(vocabs))
     #print(vocabs)
-    rand = random.choice(vocabs, 100)
-    print(rand)
+    random.seed(int(time.time()))
+    rand = random.choice(vocabs, 300)
+    #print(rand)
+    #print(type(rand))
     #print(random.choice(docs, 3))
+
+    for i in range(0, len(rand)):
+        rand[i].encode("utf-8", 'ignore')
 
     #inicializa matriz
     mat_dist = [[0] * len(rand) for i in range(len(rand))]
@@ -107,13 +115,19 @@ for doc in docs:
             #print('{:4}'.format(mat_dist[i][j]))
 
     # Exibe a matriz
-    print(np.matrix(mat_dist))
-    file = open('/home/lucas/Documentos/git/nlptp1/vecs/' + doc, 'w')
+    #print(np.matrix(mat_dist))
+    file = open('/home/lucas/Documentos/git/nlptp1/vecs/' + docs[d], 'w')
     #for item in vocabs:
     file.write(str(np.matrix(mat_dist)))
     file.close()
 
-    np.savetxt('/home/lucas/Documentos/git/nlptp1/vecs/' + doc, mat_dist, fmt="%1.8f")
+    np.savetxt('/home/lucas/Documentos/git/nlptp1/vecs/' + docs[d], mat_dist, fmt="%1.8f")
+
+    #np.savetxt('/home/lucas/Documentos/git/nlptp1/minivoc/' + docs[d], rand, fmt=u"%s")
+    file = open('/home/lucas/Documentos/git/nlptp1/minivoc/' + docs[d], 'w')
+    for item in rand:
+        file.write(item + '\n')
+    file.close()
 
 
 print("Ended")
